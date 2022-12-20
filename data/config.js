@@ -1,12 +1,17 @@
 const mysql = require("mysql2");
-let dbuser = require('./dbuser.json');
 
 const pool = mysql.createPool({
     connectionLimit: 5,
     host: "localhost",
-    user: dbuser.user,
+    user: 'root',
     database: "service",
-    password: dbuser.password
+    password: '',
+});
+
+pool.on('enqueue', function (sequence) {
+    if (sequence instanceof mysql.Sequences.Query) {
+        console.log(sequence.sql);
+    }
 });
 
 module.exports = pool;
